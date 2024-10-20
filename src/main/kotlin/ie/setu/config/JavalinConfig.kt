@@ -10,16 +10,10 @@ class JavalinConfig {
         val app = Javalin.create().apply {
             exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
             error(404) { ctx -> ctx.json("404 - Not Found") }
-        }.start(getRemoteAssignedPort())
+        }.start(7001)
 
         registerRoutes(app)
         return app
-    }
-    private fun getRemoteAssignedPort(): Int {
-        val remotePort = System.getenv("PORT")
-        return if (remotePort != null) {
-            Integer.parseInt(remotePort)
-        } else 7001
     }
 
     private fun registerRoutes(app: Javalin) {
