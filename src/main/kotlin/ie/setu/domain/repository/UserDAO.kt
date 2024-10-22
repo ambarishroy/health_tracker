@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 class UserDAO {
 
-    private val users = arrayListOf<User>(
+    /*private val users = arrayListOf<User>(
         User(name = "Alice", email = "alice@wonderland.com", id = 0),
         User(name = "Bob", email = "bob@cat.ie", id = 1),
         User(name = "Mary", email = "mary@contrary.com", id = 2),
         User(name = "Carol", email = "carol@singer.com", id = 3)
-    )
+    )*/
 
     fun getAll() : ArrayList<User>{
         val userList: ArrayList<User> = arrayListOf()
@@ -25,7 +25,11 @@ class UserDAO {
     }
 
     fun findById(id: Int): User?{
-        return null
+        return transaction {
+            Users.selectAll().where { Users.id eq id }
+                .map{mapToUser(it)}
+                .firstOrNull()
+        }
     }
 
     fun save(user: User){
