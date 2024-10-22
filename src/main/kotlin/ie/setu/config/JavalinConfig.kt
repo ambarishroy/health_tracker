@@ -2,6 +2,7 @@ package ie.setu.config
 
 import ie.setu.controllers.HealthTrackerController
 import io.javalin.Javalin
+import org.jetbrains.exposed.sql.selectAll
 
 class JavalinConfig {
 
