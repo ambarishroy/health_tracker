@@ -23,7 +23,6 @@ fun mapToActivity(it: ResultRow) = Activity(
 )
 fun mapToRatings(it: ResultRow) = UserRating(
     id = it[Ratings.id],
-    comments = it[Ratings.comments],
     rating = it[Ratings.rating],
     userId = it[Ratings.userId]
 )
