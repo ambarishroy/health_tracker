@@ -32,7 +32,6 @@ class RatingDAO{
     fun save(rate: UserRating){
         transaction {
             Ratings.insert {
-                it[comments] = rate.comments
                 it[rating] = rate.rating
                 it[userId] = rate.userId
             }
