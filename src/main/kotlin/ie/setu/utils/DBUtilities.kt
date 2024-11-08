@@ -4,8 +4,10 @@ import ie.setu.domain.User
 import ie.setu.domain.db.Users
 import org.jetbrains.exposed.sql.ResultRow
 import ie.setu.domain.Activity
+import ie.setu.domain.UserBMI
 import ie.setu.domain.db.Activities
 import ie.setu.domain.UserRating
+import ie.setu.domain.db.BMI
 import ie.setu.domain.db.Ratings
 
 fun mapToUser(it: ResultRow) = User(
@@ -25,4 +27,12 @@ fun mapToRatings(it: ResultRow) = UserRating(
     id = it[Ratings.id],
     rating = it[Ratings.rating],
     userId = it[Ratings.userId]
+)
+fun mapToBMI(it: ResultRow) = UserBMI(
+    id = it[BMI.id],
+    weight = it[BMI.weight].toFloat(),
+    height = it[BMI.height].toFloat(),
+    userId = it[BMI.userId],
+    calculatedBMI = it[BMI.calculatedBMI].toFloat()
+
 )

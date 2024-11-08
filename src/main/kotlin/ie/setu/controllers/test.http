@@ -1,0 +1,8 @@
+POST http://localhost:7001/api/bmi
+Content-Type: application/json
+
+{
+  "weight":"67",
+  "height":1.8,
+  "userId":4
+}

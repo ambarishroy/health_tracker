@@ -1,11 +1,8 @@
 package ie.setu.controllers
 
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ie.setu.domain.UserRating
-import ie.setu.domain.repository.ActivityDAO
 import ie.setu.domain.repository.RatingDAO
 import ie.setu.domain.repository.UserDAO
 import io.javalin.http.Context
@@ -13,7 +10,6 @@ import io.javalin.http.Context
 object RatingController{
     private val ratingDAO= RatingDAO()
     private val userDao= UserDAO()
-    private val activityDAO= ActivityDAO()
 
     fun getAllRatings(ctx: Context) {
         ctx.json(ratingDAO.getAll())
