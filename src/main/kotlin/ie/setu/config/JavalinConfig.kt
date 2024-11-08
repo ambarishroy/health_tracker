@@ -1,5 +1,6 @@
 package ie.setu.config
 
+import ie.setu.controllers.BMIController
 import ie.setu.controllers.HealthTrackerController
 import ie.setu.controllers.RatingController
 import ie.setu.utils.jsonObjectMapper
@@ -31,14 +32,18 @@ class JavalinConfig {
         app.delete("/api/users/{user-id}", HealthTrackerController::deleteUser)
         app.patch("/api/users/{user-id}", HealthTrackerController::updateUser)
         app.get("/api/users/email/{email}", HealthTrackerController::getUserByEmail)
-    //activity route
+        //activity route
         app.get("/api/activities", HealthTrackerController::getAllActivities)
         app.post("/api/activities", HealthTrackerController::addActivity)
         app.get("/api/users/{user-id}/activities", HealthTrackerController::getActivitiesByUserId)
-    //rating route
+        //rating route
         app.get("/api/ratings", RatingController::getAllRatings)
         app.post("/api/ratings", RatingController::addRating)
-        app.get("/api/ratings/{user-id}", RatingController::getRatingsByUserId)
+        app.get("/api/users/{user-id}/ratings", RatingController::getRatingsByUserId)
+        //BMI routes
+        app.get("/api/bmi", BMIController::getAllBMI)
+        app.post("/api/bmi", BMIController::addBMI)
+        app.get("/api/users/{user-id}/bmi", BMIController::getBMIByUserId)
 
     }
 
