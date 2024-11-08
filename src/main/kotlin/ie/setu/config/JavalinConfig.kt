@@ -1,17 +1,23 @@
 package ie.setu.config
 
 import ie.setu.controllers.HealthTrackerController
+import ie.setu.utils.jsonObjectMapper
 import io.javalin.Javalin
+import io.javalin.json.JavalinJackson
 import org.jetbrains.exposed.sql.selectAll
 
 class JavalinConfig {
 
     fun startJavalinService(): Javalin {
-
-        val app = Javalin.create().apply {
-            exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
-            error(404) { ctx -> ctx.json("404 - Not Found") }
-        }.start(7001)
+        val app = Javalin.create {
+            //add this jsonMapper to serialise objects to json
+            it.jsonMapper(JavalinJackson(jsonObjectMapper()))
+        }
+            .apply{
+                exception(Exception::class.java) { e, ctx -> e.printStackTrace() }
+                error(404) { ctx -> ctx.json("404 - Not Found") }
+            }
+            .start(7001)
 
         registerRoutes(app)
         return app
@@ -24,6 +30,10 @@ class JavalinConfig {
         app.delete("/api/users/{user-id}", HealthTrackerController::deleteUser)
         app.patch("/api/users/{user-id}", HealthTrackerController::updateUser)
         app.get("/api/users/email/{email}", HealthTrackerController::getUserByEmail)
+
+        app.get("/api/activities", HealthTrackerController::getAllActivities)
+        app.post("/api/activities", HealthTrackerController::addActivity)
+        app.get("/api/users/{user-id}/activities", HealthTrackerController::getActivitiesByUserId)
     }
 
 }
