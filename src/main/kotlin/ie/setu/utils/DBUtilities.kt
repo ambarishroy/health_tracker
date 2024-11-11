@@ -37,3 +37,10 @@ fun mapToCalorie(it: ResultRow) = Calorie(
     calculatedCalorie = it[Calories.calculatedcalorie].toFloat(),
     velocity = it[Calories.velocity].toFloat(),
 )
+fun mapToSteps(it: ResultRow) = Step(
+    id = it[StepsTrack.id],
+    target = it[StepsTrack.target],
+    steps = it[StepsTrack.steps],
+    status = it[StepsTrack.statusresponse].toString(),
+    userId = it[StepsTrack.userId],
+)
