@@ -1,6 +1,7 @@
 package ie.setu.config
 
 import ie.setu.controllers.BMIController
+import ie.setu.controllers.CalorieController
 import ie.setu.controllers.HealthTrackerController
 import ie.setu.controllers.RatingController
 import ie.setu.utils.jsonObjectMapper
@@ -44,6 +45,10 @@ class JavalinConfig {
         app.get("/api/bmi", BMIController::getAllBMI)
         app.post("/api/bmi", BMIController::addBMI)
         app.get("/api/users/{user-id}/bmi", BMIController::getBMIByUserId)
+        //BMI routes
+        app.get("/api/calorie", CalorieController::getAllCalorie)
+        app.post("/api/calorie", CalorieController::addCalorie)
+        app.get("/api/users/{user-id}/calorie", CalorieController::getCalorieByUserId)
 
     }
 

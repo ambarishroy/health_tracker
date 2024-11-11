@@ -3,7 +3,6 @@ package ie.setu.controllers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ie.setu.domain.UserBMI
-import ie.setu.domain.UserRating
 import ie.setu.domain.repository.BMIDAO
 import ie.setu.domain.repository.UserDAO
 import io.javalin.http.Context
