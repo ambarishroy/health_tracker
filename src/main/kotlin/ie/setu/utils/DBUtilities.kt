@@ -1,14 +1,8 @@
 package ie.setu.utils
 
-import ie.setu.domain.User
-import ie.setu.domain.db.Users
+import ie.setu.domain.*
 import org.jetbrains.exposed.sql.ResultRow
-import ie.setu.domain.Activity
-import ie.setu.domain.UserBMI
-import ie.setu.domain.db.Activities
-import ie.setu.domain.UserRating
-import ie.setu.domain.db.BMI
-import ie.setu.domain.db.Ratings
+import ie.setu.domain.db.*
 
 fun mapToUser(it: ResultRow) = User(
     id = it[Users.id],
@@ -34,5 +28,12 @@ fun mapToBMI(it: ResultRow) = UserBMI(
     height = it[BMI.height].toFloat(),
     userId = it[BMI.userId],
     calculatedBMI = it[BMI.calculatedBMI].toFloat()
-
+)
+fun mapToCalorie(it: ResultRow) = Calorie(
+    id = it[Calories.id],
+    weight = it[Calories.weight].toFloat(),
+    height = it[Calories.height].toFloat(),
+    userId = it[Calories.userId],
+    calculatedCalorie = it[Calories.calculatedcalorie].toFloat(),
+    velocity = it[Calories.velocity].toFloat(),
 )
