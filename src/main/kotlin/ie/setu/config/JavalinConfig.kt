@@ -50,6 +50,10 @@ class JavalinConfig {
         app.get("/api/steps", StepsController::getAllSteps)
         app.post("/api/steps", StepsController::addStepTracking)
         app.get("/api/users/{user-id}/steps", StepsController::getStepsByUserId)
+        //bloodpressuretracking routes
+        app.get("/api/bloodpressure", BloodPressureController::getAllBP)
+        app.post("/api/bloodpressure", BloodPressureController::addBP)
+        app.get("/api/users/{user-id}/bloodpressure", BloodPressureController::getBPByUserId)
 
     }
 

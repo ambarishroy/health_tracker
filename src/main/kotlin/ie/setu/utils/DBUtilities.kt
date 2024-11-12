@@ -44,3 +44,10 @@ fun mapToSteps(it: ResultRow) = Step(
     status = it[StepsTrack.statusresponse].toString(),
     userId = it[StepsTrack.userId],
 )
+fun mapToBP(it: ResultRow): UserBloodPressure = UserBloodPressure(
+    id = it[BloodPressure.id],
+    lowerval = it[BloodPressure.lower],
+    upperval = it[BloodPressure.upper],
+    category = it[BloodPressure.statusresponse].toString(),
+    userId = it[BloodPressure.userId],
+)
