@@ -1,11 +1,16 @@
 package ie.setu.domain.repository
 
+import ie.setu.domain.User
 import ie.setu.domain.UserBloodPressure
 import ie.setu.domain.db.BloodPressure
+import ie.setu.domain.db.Users
 import ie.setu.utils.mapToBP
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class BloodPressureDAO{
     //Get the blood pressures of users in the database regardless of user id
@@ -48,6 +53,21 @@ class BloodPressureDAO{
                 }
                 it[statusresponse] = bp.category
                 it[userId] = bp.userId
+            }
+        }
+    }
+    fun delete(id: Int):Int{
+        return transaction{
+            BloodPressure.deleteWhere{ userId eq id }
+        }
+    }
+
+    fun update(id: Int, bp: UserBloodPressure){
+        transaction {
+            BloodPressure.update ({
+                BloodPressure.userId eq id}) {
+                it[lower] = bp.lowerval
+                it[upper] = bp.upperval
             }
         }
     }

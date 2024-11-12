@@ -42,6 +42,8 @@ class JavalinConfig {
         app.get("/api/bmi", BMIController::getAllBMI)
         app.post("/api/bmi", BMIController::addBMI)
         app.get("/api/users/{user-id}/bmi", BMIController::getBMIByUserId)
+        app.delete("/api/users/{user-id}/bmi", BMIController::deleteUserBMI)
+        app.patch("/api/users/{user-id}/bmi", BMIController::updateUserBMI)
         //calorie routes
         app.get("/api/calorie", CalorieController::getAllCalorie)
         app.post("/api/calorie", CalorieController::addCalorie)
@@ -54,6 +56,8 @@ class JavalinConfig {
         app.get("/api/bloodpressure", BloodPressureController::getAllBP)
         app.post("/api/bloodpressure", BloodPressureController::addBP)
         app.get("/api/users/{user-id}/bloodpressure", BloodPressureController::getBPByUserId)
+        app.delete("/api/users/{user-id}/bloodpressure", BloodPressureController::deleteUserBP)
+        app.patch("/api/users/{user-id}/bloodpressure", BloodPressureController::updateUserBP)
 
     }
 
