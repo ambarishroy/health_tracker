@@ -1,12 +1,8 @@
 package ie.setu.domain.repository
 
-import ie.setu.domain.Calorie
 import ie.setu.domain.Step
-import ie.setu.domain.db.Calories
 import ie.setu.domain.db.StepsTrack
-import ie.setu.utils.mapToCalorie
 import ie.setu.utils.mapToSteps
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
