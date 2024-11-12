@@ -3,6 +3,7 @@ package ie.setu.controllers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import ie.setu.domain.Step
+import ie.setu.domain.User
 import ie.setu.domain.UserBloodPressure
 import ie.setu.domain.repository.BloodPressureDAO
 import ie.setu.domain.repository.StepsDAO
@@ -29,5 +30,16 @@ object BloodPressureController{
                 ctx.json(bp)
             }
         }
+    }
+    fun deleteUserBP(ctx: Context){
+        bpDAO.delete(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateUserBP(ctx: Context){
+        val mapper = jacksonObjectMapper()
+        val userUpdates = mapper.readValue<UserBloodPressure>(ctx.body())
+        bpDAO.update(
+            id = ctx.pathParam("user-id").toInt(),
+            bp = userUpdates)
     }
 }

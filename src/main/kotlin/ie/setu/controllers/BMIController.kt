@@ -28,4 +28,15 @@ object BMIController{
             }
         }
     }
+    fun deleteUserBMI(ctx: Context){
+        bmiDAO.delete(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateUserBMI(ctx: Context){
+        val mapper = jacksonObjectMapper()
+        val userUpdates = mapper.readValue<UserBMI>(ctx.body())
+        bmiDAO.update(
+            id = ctx.pathParam("user-id").toInt(),
+            bmi = userUpdates)
+    }
 }

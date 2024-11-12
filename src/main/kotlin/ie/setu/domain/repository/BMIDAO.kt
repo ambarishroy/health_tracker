@@ -1,15 +1,14 @@
 package ie.setu.domain.repository
 
 import ie.setu.domain.UserBMI
-import ie.setu.domain.UserRating
 import ie.setu.domain.db.BMI
-import ie.setu.domain.db.Ratings
 import ie.setu.utils.mapToBMI
-import ie.setu.utils.mapToRatings
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class BMIDAO{
     //Get all the BMI in the database regardless of user id
@@ -38,6 +37,22 @@ class BMIDAO{
                 it[height] = bmi.height
                 it[userId] = bmi.userId
                 it[calculatedBMI] = calBMI
+            }
+        }
+    }
+    fun delete(id: Int):Int{
+        return transaction{
+            BMI.deleteWhere{ userId eq id }
+        }
+    }
+
+    fun update(id: Int, bmi: UserBMI){
+        transaction {
+            BMI.update ({
+                BMI.userId eq id}) {
+                it[weight] = bmi.weight
+                it[height] = bmi.height
+                it[userId] = bmi.userId
             }
         }
     }
