@@ -33,6 +33,7 @@ class UserDAO {
         transaction {
         Users.insert {
             it[name] = user.name
+            it[age]=user.age
             it[email] = user.email} }
     }
 
@@ -56,6 +57,7 @@ class UserDAO {
             Users.update ({
                 Users.id eq id}) {
                 it[name] = user.name
+                it[age] = user.age
                 it[email] = user.email
             }
         }

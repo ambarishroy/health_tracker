@@ -1,15 +1,14 @@
 package ie.setu.domain.repository
 
 import ie.setu.domain.Calorie
-import ie.setu.domain.UserBMI
-import ie.setu.domain.db.BMI
 import ie.setu.domain.db.Calories
-import ie.setu.utils.mapToBMI
 import ie.setu.utils.mapToCalorie
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class CalorieDAO {
     //Get all the calorie in the database regardless of user id
@@ -39,6 +38,22 @@ class CalorieDAO {
                 it[velocity] = cal.velocity
                 it[userId] = cal.userId
                 it[calculatedcalorie] = calCalorie.toFloat()
+            }
+        }
+    }
+    fun delete(id: Int):Int{
+        return transaction{
+            Calories.deleteWhere{ userId eq id }
+        }
+    }
+
+    fun update(id: Int, cal: Calorie){
+        transaction {
+            Calories.update ({
+                Calories.userId eq id}) {
+                it[weight] = cal.weight
+                it[height] = cal.height
+                it[velocity] = cal.velocity
             }
         }
     }

@@ -52,7 +52,6 @@ class BMIDAO{
                 BMI.userId eq id}) {
                 it[weight] = bmi.weight
                 it[height] = bmi.height
-                it[userId] = bmi.userId
             }
         }
     }

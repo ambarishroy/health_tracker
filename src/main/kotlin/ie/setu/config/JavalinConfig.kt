@@ -38,6 +38,8 @@ class JavalinConfig {
         app.get("/api/ratings", RatingController::getAllRatings)
         app.post("/api/ratings", RatingController::addRating)
         app.get("/api/users/{user-id}/ratings", RatingController::getRatingsByUserId)
+        app.delete("/api/users/{user-id}/ratings", RatingController::deleteUserRating)
+        app.patch("/api/users/{user-id}/ratings", RatingController::updateUserRating)
         //BMI routes
         app.get("/api/bmi", BMIController::getAllBMI)
         app.post("/api/bmi", BMIController::addBMI)
@@ -48,10 +50,14 @@ class JavalinConfig {
         app.get("/api/calorie", CalorieController::getAllCalorie)
         app.post("/api/calorie", CalorieController::addCalorie)
         app.get("/api/users/{user-id}/calorie", CalorieController::getCalorieByUserId)
+        app.delete("/api/users/{user-id}/calorie", CalorieController::deleteUserCalorie)
+        app.patch("/api/users/{user-id}/calorie", CalorieController::updateUserCalorie)
         //stepstracking routes
         app.get("/api/steps", StepsController::getAllSteps)
         app.post("/api/steps", StepsController::addStepTracking)
         app.get("/api/users/{user-id}/steps", StepsController::getStepsByUserId)
+        app.delete("/api/users/{user-id}/steps", StepsController::deleteUserSteps)
+        app.patch("/api/users/{user-id}/steps", StepsController::updateUserSteps)
         //bloodpressuretracking routes
         app.get("/api/bloodpressure", BloodPressureController::getAllBP)
         app.post("/api/bloodpressure", BloodPressureController::addBP)
@@ -60,5 +66,4 @@ class JavalinConfig {
         app.patch("/api/users/{user-id}/bloodpressure", BloodPressureController::updateUserBP)
 
     }
-
 }

@@ -27,4 +27,15 @@ object StepsController {
             }
         }
     }
+    fun deleteUserSteps(ctx: Context){
+        stepsDAO.delete(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateUserSteps(ctx: Context){
+        val mapper = jacksonObjectMapper()
+        val userUpdates = mapper.readValue<Step>(ctx.body())
+        stepsDAO.update(
+            id = ctx.pathParam("user-id").toInt(),
+            stp = userUpdates)
+    }
 }
