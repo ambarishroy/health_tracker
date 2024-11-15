@@ -13,12 +13,12 @@ import org.jetbrains.exposed.sql.update
 class StepsDAO {
     //Get the steps of users in the database regardless of user id
     fun getAll(): ArrayList<Step> {
-        val StepList: ArrayList<Step> = arrayListOf()
+        val stepList: ArrayList<Step> = arrayListOf()
         transaction {
             StepsTrack.selectAll().map {
-                StepList.add(mapToSteps(it)) }
+                stepList.add(mapToSteps(it)) }
         }
-        return StepList
+        return stepList
     }
     //Find steps completed for a specific user id
     fun findByUserId(userId: Int): List<Step>{
@@ -34,13 +34,7 @@ class StepsDAO {
             StepsTrack.insert {
                 it[steps] = stp.steps
                 it[target] = stp.target
-                if(stp.steps<stp.target){
-                    stp.status= "${stp.target-stp.steps} more steps to go!"
-                }
-                else{
-                    stp.status="Congratulations!"
-                }
-                it[statusresponse] = stp.status
+                it[statusresponse] = categorizeSteps(stp.steps, stp.target)
                 it[userId] = stp.userId
             }
         }
@@ -57,7 +51,18 @@ class StepsDAO {
                 StepsTrack.userId eq id}) {
                 it[steps] = stp.steps
                 it[target] = stp.target
+                it[statusresponse] = categorizeSteps(stp.steps, stp.target)
             }
         }
+    }
+    fun categorizeSteps(steps: Int, target: Int):String{
+        val status: String?
+        if(steps<target){
+             status= "${target-steps} more steps to go!"
+        }
+        else{
+             status="Congratulations!"
+        }
+        return status
     }
 }

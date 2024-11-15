@@ -30,13 +30,12 @@ class BMIDAO{
     }
     //Save the BMI to the database
     fun save(bmi: UserBMI){
-    val calBMI= bmi.weight/(bmi.height * bmi.height)
         transaction {
             BMI.insert {
                 it[weight] = bmi.weight
                 it[height] = bmi.height
                 it[userId] = bmi.userId
-                it[calculatedBMI] = calBMI
+                it[calculatedBMI] = CalculateBMI(bmi.weight, bmi.height)
             }
         }
     }
@@ -52,7 +51,12 @@ class BMIDAO{
                 BMI.userId eq id}) {
                 it[weight] = bmi.weight
                 it[height] = bmi.height
+                it[calculatedBMI]=CalculateBMI(bmi.weight, bmi.height)
             }
         }
+    }
+    fun CalculateBMI(weight:Float, height:Float):Float{
+        val calBMI=weight/(height*height)
+        return calBMI
     }
 }
