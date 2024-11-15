@@ -1,9 +1,7 @@
 package ie.setu.domain.repository
 
-import ie.setu.domain.User
 import ie.setu.domain.UserBloodPressure
 import ie.setu.domain.db.BloodPressure
-import ie.setu.domain.db.Users
 import ie.setu.utils.mapToBP
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere

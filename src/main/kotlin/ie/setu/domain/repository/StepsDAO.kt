@@ -3,9 +3,12 @@ package ie.setu.domain.repository
 import ie.setu.domain.Step
 import ie.setu.domain.db.StepsTrack
 import ie.setu.utils.mapToSteps
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class StepsDAO {
     //Get the steps of users in the database regardless of user id
@@ -39,6 +42,21 @@ class StepsDAO {
                 }
                 it[statusresponse] = stp.status
                 it[userId] = stp.userId
+            }
+        }
+    }
+    fun delete(id: Int):Int{
+        return transaction{
+            StepsTrack.deleteWhere{ userId eq id }
+        }
+    }
+
+    fun update(id: Int, stp: Step){
+        transaction {
+            StepsTrack.update ({
+                StepsTrack.userId eq id}) {
+                it[steps] = stp.steps
+                it[target] = stp.target
             }
         }
     }

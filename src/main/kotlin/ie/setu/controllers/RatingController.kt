@@ -28,4 +28,15 @@ object RatingController{
             }
         }
     }
+    fun deleteUserRating(ctx: Context){
+        ratingDAO.delete(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateUserRating(ctx: Context){
+        val mapper = jacksonObjectMapper()
+        val userUpdates = mapper.readValue<UserRating>(ctx.body())
+        ratingDAO.update(
+            id = ctx.pathParam("user-id").toInt(),
+            rate = userUpdates)
+    }
 }

@@ -2,11 +2,8 @@ package ie.setu.controllers
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import ie.setu.domain.Step
-import ie.setu.domain.User
 import ie.setu.domain.UserBloodPressure
 import ie.setu.domain.repository.BloodPressureDAO
-import ie.setu.domain.repository.StepsDAO
 import ie.setu.domain.repository.UserDAO
 import io.javalin.http.Context
 

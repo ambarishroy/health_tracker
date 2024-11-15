@@ -28,4 +28,15 @@ object CalorieController{
             }
         }
     }
+    fun deleteUserCalorie(ctx: Context){
+        calorieDAO.delete(ctx.pathParam("user-id").toInt())
+    }
+
+    fun updateUserCalorie(ctx: Context){
+        val mapper = jacksonObjectMapper()
+        val userUpdates = mapper.readValue<Calorie>(ctx.body())
+        calorieDAO.update(
+            id = ctx.pathParam("user-id").toInt(),
+            cal = userUpdates)
+    }
 }
