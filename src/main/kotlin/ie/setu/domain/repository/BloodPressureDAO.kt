@@ -34,21 +34,7 @@ class BloodPressureDAO{
             BloodPressure.insert {
                 it[lower] = bp.lowerval
                 it[upper] = bp.upperval
-                if(bp.upperval<120 && bp.lowerval<80){
-                    bp.category= "Blood pressure is normal."
-                }
-                else if((bp.upperval in 121..128) && bp.lowerval<80){
-                    bp.category= "Blood pressure is elevated."
-                }
-                else if((bp.upperval in 131..138) || (bp.lowerval in 81..88)){
-                    bp.category= "Blood pressure is high. Hypertension stage 1."
-                }
-                else if((bp.upperval in 140..180) || (bp.lowerval in 90..120)){
-                    bp.category= "Blood pressure is high. Hypertension stage 2."
-                }
-                else{
-                    bp.category="Hypertensive crisis! Consult your doctor immediately."
-                }
+                bp.category = categorizeBloodPressure(bp.upperval, bp.lowerval)
                 it[statusresponse] = bp.category
                 it[userId] = bp.userId
             }
@@ -66,7 +52,22 @@ class BloodPressureDAO{
                 BloodPressure.userId eq id}) {
                 it[lower] = bp.lowerval
                 it[upper] = bp.upperval
+                bp.category = categorizeBloodPressure(bp.upperval, bp.lowerval)
+                it[statusresponse] = bp.category
             }
+        }
+    }
+    fun categorizeBloodPressure(upper: Int, lower: Int): String {
+        if (upper < 120 && lower < 80) {
+            return "Blood pressure is normal."
+        } else if (upper in 121..128 && lower < 80) {
+            return "Blood pressure is elevated."
+        } else if (upper in 131..138 || lower in 81..88) {
+            return "Blood pressure is high. Hypertension stage 1."
+        } else if (upper in 140..180 || lower in 90..120) {
+            return "Blood pressure is high. Hypertension stage 2."
+        } else {
+            return "Hypertensive crisis! Consult your doctor immediately."
         }
     }
 }

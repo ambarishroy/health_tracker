@@ -30,14 +30,13 @@ class CalorieDAO {
     }
     //Save the Calorie to the database
     fun save(cal: Calorie){
-        val calCalorie= (cal.weight*0.035)+(((cal.velocity*cal.velocity)/cal.height))*0.029*cal.weight
         transaction {
             Calories.insert {
                 it[weight] = cal.weight
                 it[height] = cal.height
                 it[velocity] = cal.velocity
+                it[calculatedcalorie] = CalculateCalorie(cal.weight, cal.height, cal.velocity)
                 it[userId] = cal.userId
-                it[calculatedcalorie] = calCalorie.toFloat()
             }
         }
     }
@@ -54,7 +53,12 @@ class CalorieDAO {
                 it[weight] = cal.weight
                 it[height] = cal.height
                 it[velocity] = cal.velocity
+                it[calculatedcalorie] = CalculateCalorie(cal.weight, cal.height, cal.velocity)
             }
         }
+    }
+    fun CalculateCalorie(weight: Float, height: Float, velocity:Float): Float {
+        val calCalorie= (weight*0.035)+(((velocity*velocity)/height))*0.029*weight
+        return calCalorie.toFloat()
     }
 }
