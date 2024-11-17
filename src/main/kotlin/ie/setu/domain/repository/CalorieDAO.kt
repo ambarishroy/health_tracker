@@ -21,11 +21,12 @@ class CalorieDAO {
         return calorieList
     }
     //Find calorie for a specific user id
-    fun findByUserId(userId: Int): List<Calorie>{
+    fun findByUserId(userId: Int): Calorie?{
         return transaction {
             Calories
                 .selectAll().where { Calories.userId eq userId}
                 .map { mapToCalorie(it) }
+                .singleOrNull()
         }
     }
     //Save the Calorie to the database

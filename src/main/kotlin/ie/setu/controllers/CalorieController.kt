@@ -23,7 +23,7 @@ object CalorieController{
     fun getCalorieByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val calorie = calorieDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (calorie.isNotEmpty()) {
+            if (calorie != null) {
                 ctx.json(calorie)
             }
         }

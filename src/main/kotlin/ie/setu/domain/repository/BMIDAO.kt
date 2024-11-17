@@ -21,11 +21,12 @@ class BMIDAO{
         return BMIList
     }
     //Find BMI for a specific user id
-    fun findByUserId(userId: Int): List<UserBMI>{
+    fun findByUserId(userId: Int): UserBMI?{
         return transaction {
             BMI
                 .selectAll().where { BMI.userId eq userId}
                 .map { mapToBMI(it) }
+                .singleOrNull()
         }
     }
     //Save the BMI to the database
