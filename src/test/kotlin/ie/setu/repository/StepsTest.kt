@@ -1,5 +1,7 @@
 package ie.setu.repository
 
+import ie.setu.domain.Step
+import ie.setu.domain.UserBMI
 import ie.setu.domain.db.StepsTrack
 import ie.setu.domain.db.Users
 import ie.setu.domain.repository.StepsDAO
@@ -101,6 +103,87 @@ class StepsTest {
 
                 //Act & Assert
                 assertEquals(0, stepsDAO.getAll().size)
+            }
+        }
+    }
+    @Nested
+    inner class CreateUsers {
+        @Test
+        fun `multiple users added to table can be retrieved successfully`() {
+            transaction {
+
+                //Arrange - create and populate table with three users
+                val userDAO = populateUserTable()
+                val stepsDAO = populateUserStepsTable()
+                //Act & Assert
+                assertEquals(3, stepsDAO.getAll().size)
+                assertEquals(stp1, stepsDAO.findByUserId(stp1.userId))
+                assertEquals(stp2, stepsDAO.findByUserId(stp2.userId))
+                assertEquals(stp3, stepsDAO.findByUserId(stp3.userId))
+            }
+        }
+    }
+    @Nested
+    inner class DeleteUsers {
+        @Test
+        fun `deleting a non-existant user in table results in no deletion`() {
+            transaction {
+
+                //Arrange - create and populate table with three users
+                val userDAO = populateUserTable()
+                val stepsDAO = populateUserStepsTable()
+                //Act & Assert
+                assertEquals(3, stepsDAO.getAll().size)
+                stepsDAO.delete(4)
+                assertEquals(3, stepsDAO.getAll().size)
+            }
+        }
+
+        @Test
+        fun `deleting an existing user in table results in record being deleted`() {
+            transaction {
+
+                //Arrange - create and populate table with three users
+                val userDAO = populateUserTable()
+                val stepsDAO = populateUserStepsTable()
+                //Act & Assert
+                assertEquals(3, stepsDAO.getAll().size)
+                stepsDAO.delete(stp3.userId)
+                assertEquals(2, stepsDAO.getAll().size)
+            }
+        }
+    }
+    @Nested
+    inner class UpdateUsers {
+
+        @Test
+        fun `updating existing user in table results in successful update`() {
+            transaction {
+
+                //Arrange - create and populate table with three users
+                val userDAO = populateUserTable()
+                val stepsDAO = populateUserStepsTable()
+
+                //Act & Assert
+                val user3Updated = Step(3, 10995, 9000,"Congratulations!", userId = 3)
+                stepsDAO.update(stp3.userId, user3Updated)
+                assertEquals(user3Updated, stepsDAO.findByUserId(3))
+            }
+        }
+
+        @Test
+        fun `updating non-existant user in table results in no updates`() {
+            transaction {
+
+                //Arrange - create and populate table with three users
+                val userDAO = populateUserTable()
+                val stepsDAO = populateUserStepsTable()
+
+                //Act & Assert
+                val user4Updated = Step(4, 10995, 9000,"Congratulations!", userId = 4)
+                stepsDAO.update(4, user4Updated)
+                assertEquals(null, stepsDAO.findByUserId(4))
+                assertEquals(3, stepsDAO.getAll().size)
             }
         }
     }
