@@ -1,6 +1,5 @@
 package ie.setu.repository
 
-import ie.setu.domain.User
 import ie.setu.domain.UserBMI
 import ie.setu.domain.db.BMI
 import ie.setu.domain.db.Users

@@ -21,11 +21,12 @@ class BloodPressureDAO{
         return BPList
     }
     //Find the blood pressure for a specific user id
-    fun findByUserId(userId: Int): List<UserBloodPressure>{
+    fun findByUserId(userId: Int): UserBloodPressure ?{
         return transaction {
             BloodPressure
                 .selectAll().where { BloodPressure.userId eq userId}
                 .map { mapToBP(it) }
+                .singleOrNull()
         }
     }
     //Save the bloodpressure to the database

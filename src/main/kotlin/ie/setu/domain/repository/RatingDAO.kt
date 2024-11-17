@@ -21,11 +21,12 @@ class RatingDAO{
         return RatingList
     }
     //Find rating for a specific user id
-    fun findByUserId(userId: Int): List<UserRating>{
+    fun findByUserId(userId: Int): UserRating ?{
         return transaction {
             Ratings
                 .selectAll().where {Ratings.userId eq userId}
                 .map { mapToRatings(it) }
+                .singleOrNull()
         }
     }
     //Save the rating to the database

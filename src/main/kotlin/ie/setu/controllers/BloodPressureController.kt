@@ -23,7 +23,7 @@ object BloodPressureController{
     fun getBPByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val bp = bpDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (bp.isNotEmpty()) {
+            if (bp !=null) {
                 ctx.json(bp)
             }
         }
