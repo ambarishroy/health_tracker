@@ -23,7 +23,7 @@ object BMIController{
     fun getBMIByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val bmi = bmiDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (bmi.isNotEmpty()) {
+            if (bmi != null) {
                 ctx.json(bmi)
             }
         }

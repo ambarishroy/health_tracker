@@ -1,8 +1,14 @@
 package ie.setu.repository
 
-import ie.setu.domain.User
+import ie.setu.domain.Calorie
+import ie.setu.domain.UserBMI
+import ie.setu.domain.db.BMI
+import ie.setu.domain.db.Calories
 import ie.setu.domain.db.Users
+import ie.setu.domain.repository.BMIDAO
+import ie.setu.domain.repository.CalorieDAO
 import ie.setu.domain.repository.UserDAO
+import ie.setu.helpers.cal
 import ie.setu.helpers.users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -11,15 +17,18 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import ie.setu.helpers.nonExistingEmail
 
-//retrieving some test data from Fixtures
-val user1 = users[0]
-val user2 = users[1]
-val user3 = users[2]
+//retrieving some test data from Caloriehelper
+val userCal1 = users[0]
+val userCal2 = users[1]
+val userCal3 = users[2]
 
-class UserDAOTest {
+//retrieving some test data from Caloriehelper
+val cal1 = cal[0]
+val cal2 = cal[1]
+val cal3 = cal[2]
 
+class CalorieTest {
     companion object {
 
         //Make a connection to a local, in memory H2 database.
@@ -29,12 +38,21 @@ class UserDAOTest {
             Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver", user = "root", password = "")
         }
     }
-    internal fun populateUserTable(): UserDAO{
+
+    internal fun populateUserCalorieTable(): CalorieDAO {
+        SchemaUtils.create(Calories)
+        val calDAO = CalorieDAO()
+        calDAO.save(cal1)
+        calDAO.save(cal2)
+        calDAO.save(cal3)
+        return calDAO
+    }
+    internal fun populateUserTable(): UserDAO {
         SchemaUtils.create(Users)
         val userDAO = UserDAO()
-        userDAO.save(user1)
-        userDAO.save(user2)
-        userDAO.save(user3)
+        userDAO.save(userCal1)
+        userDAO.save(userCal2)
+        userDAO.save(userCal3)
         return userDAO
     }
     @Nested
@@ -42,79 +60,54 @@ class UserDAOTest {
         @Test
         fun `getting all users from a populated table returns all rows`() {
             transaction {
-
-                //Arrange - create and populate table with three users
+                //Populate user table before
                 val userDAO = populateUserTable()
+                //Arrange - create and populate table with three users
+                val calDAO = populateUserCalorieTable()
 
                 //Act & Assert
-                assertEquals(3, userDAO.getAll().size)
+                assertEquals(3, calDAO.getAll().size)
             }
         }
 
         @Test
         fun `get user by id that doesn't exist, results in no user returned`() {
             transaction {
-
-                //Arrange - create and populate table with three users
+                //Populate user table before
                 val userDAO = populateUserTable()
+                //Arrange - create and populate table with three users
+                val calDAO = populateUserCalorieTable()
 
                 //Act & Assert
-                assertEquals(null, userDAO.findById(4))
+                assertEquals(null, calDAO.findByUserId(4))
             }
         }
 
         @Test
         fun `get user by id that exists, results in a correct user returned`() {
             transaction {
+                //Populate user table before
+                val userDAO = populateUserTable()
                 //Arrange - create and populate table with three users
-                SchemaUtils.create(Users)
-                val userDAO = UserDAO()
-                userDAO.save(user1)
-                userDAO.save(user2)
-                userDAO.save(user3)
+                val calDAO = populateUserCalorieTable()
 
                 //Act & Assert
-                assertEquals(user3, userDAO.findById(user3.id))
+                assertEquals(cal3, calDAO.findByUserId(cal3.userId))
             }
         }
+
         @Test
         fun `get all users over empty table returns none`() {
             transaction {
-
                 //Arrange - create and setup userDAO object
-                SchemaUtils.create(Users)
-                val userDAO = UserDAO()
+                SchemaUtils.create(Calories)
+                val calDAO = CalorieDAO()
 
                 //Act & Assert
-                assertEquals(0, userDAO.getAll().size)
-            }
-        }
-
-        @Test
-        fun `get user by email that doesn't exist, results in no user returned`() {
-            transaction {
-
-                //Arrange - create and populate table with three users
-                val userDAO = populateUserTable()
-
-                //Act & Assert
-                assertEquals(null, userDAO.findByEmail(nonExistingEmail))
-            }
-        }
-
-        @Test
-        fun `get user by email that exists, results in correct user returned`() {
-            transaction {
-
-                //Arrange - create and populate table with three users
-                val userDAO = populateUserTable()
-
-                //Act & Assert
-                assertEquals(user2, userDAO.findByEmail(user2.email))
+                assertEquals(0, calDAO.getAll().size)
             }
         }
     }
-
     @Nested
     inner class CreateUsers {
         @Test
@@ -123,16 +116,15 @@ class UserDAOTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-
+                val calDAO = populateUserCalorieTable()
                 //Act & Assert
-                assertEquals(3, userDAO.getAll().size)
-                assertEquals(user1, userDAO.findById(user1.id))
-                assertEquals(user2, userDAO.findById(user2.id))
-                assertEquals(user3, userDAO.findById(user3.id))
+                assertEquals(3, calDAO.getAll().size)
+                assertEquals(cal1, calDAO.findByUserId(cal1.userId))
+                assertEquals(cal2, calDAO.findByUserId(cal2.userId))
+                assertEquals(cal3, calDAO.findByUserId(cal3.userId))
             }
         }
     }
-
     @Nested
     inner class DeleteUsers {
         @Test
@@ -141,11 +133,11 @@ class UserDAOTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-
+                val calDAO = populateUserCalorieTable()
                 //Act & Assert
-                assertEquals(3, userDAO.getAll().size)
-                userDAO.delete(4)
-                assertEquals(3, userDAO.getAll().size)
+                assertEquals(3, calDAO.getAll().size)
+                calDAO.delete(4)
+                assertEquals(3, calDAO.getAll().size)
             }
         }
 
@@ -155,11 +147,11 @@ class UserDAOTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-
+                val calDAO = populateUserCalorieTable()
                 //Act & Assert
-                assertEquals(3, userDAO.getAll().size)
-                userDAO.delete(user3.id)
-                assertEquals(2, userDAO.getAll().size)
+                assertEquals(3, calDAO.getAll().size)
+                calDAO.delete(cal3.userId)
+                assertEquals(2, calDAO.getAll().size)
             }
         }
     }
@@ -172,11 +164,12 @@ class UserDAOTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
+                val calDAO = populateUserCalorieTable()
 
                 //Act & Assert
-                val user3Updated = User(3, "new username", 23,"new@gemail.ie")
-                userDAO.update(user3.id, user3Updated)
-                assertEquals(user3Updated, userDAO.findById(3))
+                val user3Updated = Calorie(3, 76F, 1.9F,1.6F, 5.6296F  ,3)
+                calDAO.update(cal3.userId, user3Updated)
+                assertEquals(user3Updated, calDAO.findByUserId(3))
             }
         }
 
@@ -186,12 +179,13 @@ class UserDAOTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
+                val calDAO = populateUserCalorieTable()
 
                 //Act & Assert
-                val user4Updated = User(4, "new username", 45,"new@email.ie")
-                userDAO.update(4, user4Updated)
-                assertEquals(null, userDAO.findById(4))
-                assertEquals(3, userDAO.getAll().size)
+                val user4Updated = Calorie(3, 76F, 1.9F,1.6F, 5.6296F  ,4)
+                calDAO.update(4, user4Updated)
+                assertEquals(null, calDAO.findByUserId(4))
+                assertEquals(3, calDAO.getAll().size)
             }
         }
     }
