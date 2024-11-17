@@ -1,12 +1,9 @@
 package ie.setu.repository
 
-import ie.setu.domain.db.BMI
 import ie.setu.domain.db.StepsTrack
 import ie.setu.domain.db.Users
-import ie.setu.domain.repository.BMIDAO
 import ie.setu.domain.repository.StepsDAO
 import ie.setu.domain.repository.UserDAO
-import ie.setu.helpers.bmi
 import ie.setu.helpers.step
 import ie.setu.helpers.users
 import org.jetbrains.exposed.sql.Database
