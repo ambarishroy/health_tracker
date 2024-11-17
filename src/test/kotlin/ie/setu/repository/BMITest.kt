@@ -68,6 +68,7 @@ class BMITest {
                 assertEquals(3, bmiDAO.getAll().size)
             }
         }
+
         @Test
         fun `get user by id that doesn't exist, results in no user returned`() {
             transaction {
@@ -80,6 +81,7 @@ class BMITest {
                 assertEquals(null, bmiDAO.findByUserId(4))
             }
         }
+
         @Test
         fun `get user by id that exists, results in a correct user returned`() {
             transaction {
@@ -92,6 +94,7 @@ class BMITest {
                 assertEquals(bmi3, bmiDAO.findByUserId(bmi3.userId))
             }
         }
+
         @Test
         fun `get all users over empty table returns none`() {
             transaction {
@@ -103,6 +106,7 @@ class BMITest {
                 assertEquals(0, bmiDAO.getAll().size)
             }
         }
+    }
         @Nested
         inner class CreateUsers {
             @Test
@@ -186,5 +190,4 @@ class BMITest {
         }
 
 
-    }
 }

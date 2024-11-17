@@ -22,7 +22,7 @@ object StepsController {
     fun getStepsByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val steps = stepsDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (steps.isNotEmpty()) {
+            if (steps != null) {
                 ctx.json(steps)
             }
         }
