@@ -21,11 +21,12 @@ class StepsDAO {
         return stepList
     }
     //Find steps completed for a specific user id
-    fun findByUserId(userId: Int): List<Step>{
+    fun findByUserId(userId: Int): Step?{
         return transaction {
             StepsTrack
                 .selectAll().where { StepsTrack.userId eq userId}
                 .map { mapToSteps(it) }
+                .singleOrNull()
         }
     }
     //Save the steps to the database
