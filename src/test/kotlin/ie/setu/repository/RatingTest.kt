@@ -1,11 +1,11 @@
 package ie.setu.repository
 
-import ie.setu.domain.Calorie
-import ie.setu.domain.db.Calories
+import ie.setu.domain.UserRating
+import ie.setu.domain.db.Ratings
 import ie.setu.domain.db.Users
-import ie.setu.domain.repository.CalorieDAO
+import ie.setu.domain.repository.RatingDAO
 import ie.setu.domain.repository.UserDAO
-import ie.setu.helpers.cal
+import ie.setu.helpers.rate
 import ie.setu.helpers.users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -15,17 +15,17 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-//retrieving some test data from Caloriehelper
-val userCal1 = users[0]
-val userCal2 = users[1]
-val userCal3 = users[2]
+//retrieving some test data from Ratinghelper
+val userRating1 = users[0]
+val userRating2 = users[1]
+val userRating3 = users[2]
 
-//retrieving some test data from Caloriehelper
-val cal1 = cal[0]
-val cal2 = cal[1]
-val cal3 = cal[2]
+//retrieving some test data from Ratinghelper
+val rate1 = rate[0]
+val rate2 = rate[1]
+val rate3 = rate[2]
 
-class CalorieTest {
+class RatingTest {
     companion object {
 
         //Make a connection to a local, in memory H2 database.
@@ -36,20 +36,20 @@ class CalorieTest {
         }
     }
 
-    internal fun populateUserCalorieTable(): CalorieDAO {
-        SchemaUtils.create(Calories)
-        val calDAO = CalorieDAO()
-        calDAO.save(cal1)
-        calDAO.save(cal2)
-        calDAO.save(cal3)
-        return calDAO
+    internal fun populateUserRatingTable(): RatingDAO {
+        SchemaUtils.create(Ratings)
+        val ratingDAO = RatingDAO()
+        ratingDAO.save(rate1)
+        ratingDAO.save(rate2)
+        ratingDAO.save(rate3)
+        return ratingDAO
     }
     internal fun populateUserTable(): UserDAO {
         SchemaUtils.create(Users)
         val userDAO = UserDAO()
-        userDAO.save(userCal1)
-        userDAO.save(userCal2)
-        userDAO.save(userCal3)
+        userDAO.save(userRating1)
+        userDAO.save(userRating2)
+        userDAO.save(userRating3)
         return userDAO
     }
     @Nested
@@ -60,10 +60,10 @@ class CalorieTest {
                 //Populate user table before
                 val userDAO = populateUserTable()
                 //Arrange - create and populate table with three users
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
 
                 //Act & Assert
-                assertEquals(3, calDAO.getAll().size)
+                assertEquals(3, ratingDAO.getAll().size)
             }
         }
 
@@ -73,10 +73,10 @@ class CalorieTest {
                 //Populate user table before
                 val userDAO = populateUserTable()
                 //Arrange - create and populate table with three users
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
 
                 //Act & Assert
-                assertEquals(null, calDAO.findByUserId(4))
+                assertEquals(null, ratingDAO.findByUserId(4))
             }
         }
 
@@ -86,10 +86,10 @@ class CalorieTest {
                 //Populate user table before
                 val userDAO = populateUserTable()
                 //Arrange - create and populate table with three users
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
 
                 //Act & Assert
-                assertEquals(cal3, calDAO.findByUserId(cal3.userId))
+                assertEquals(rate1, ratingDAO.findByUserId(rate1.userId))
             }
         }
 
@@ -97,11 +97,11 @@ class CalorieTest {
         fun `get all users over empty table returns none`() {
             transaction {
                 //Arrange - create and setup userDAO object
-                SchemaUtils.create(Calories)
-                val calDAO = CalorieDAO()
+                SchemaUtils.create(Ratings)
+                val ratingDAO = RatingDAO()
 
                 //Act & Assert
-                assertEquals(0, calDAO.getAll().size)
+                assertEquals(0, ratingDAO.getAll().size)
             }
         }
     }
@@ -113,12 +113,12 @@ class CalorieTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
                 //Act & Assert
-                assertEquals(3, calDAO.getAll().size)
-                assertEquals(cal1, calDAO.findByUserId(cal1.userId))
-                assertEquals(cal2, calDAO.findByUserId(cal2.userId))
-                assertEquals(cal3, calDAO.findByUserId(cal3.userId))
+                assertEquals(3, ratingDAO.getAll().size)
+                assertEquals(rate1, ratingDAO.findByUserId(rate1.userId))
+                assertEquals(rate2, ratingDAO.findByUserId(rate2.userId))
+                assertEquals(rate3, ratingDAO.findByUserId(rate3.userId))
             }
         }
     }
@@ -130,11 +130,11 @@ class CalorieTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
                 //Act & Assert
-                assertEquals(3, calDAO.getAll().size)
-                calDAO.delete(4)
-                assertEquals(3, calDAO.getAll().size)
+                assertEquals(3, ratingDAO.getAll().size)
+                ratingDAO.delete(4)
+                assertEquals(3, ratingDAO.getAll().size)
             }
         }
 
@@ -144,11 +144,11 @@ class CalorieTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
                 //Act & Assert
-                assertEquals(3, calDAO.getAll().size)
-                calDAO.delete(cal3.userId)
-                assertEquals(2, calDAO.getAll().size)
+                assertEquals(3, ratingDAO.getAll().size)
+                ratingDAO.delete(rate3.userId)
+                assertEquals(2, ratingDAO.getAll().size)
             }
         }
     }
@@ -161,12 +161,12 @@ class CalorieTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
 
                 //Act & Assert
-                val user3Updated = Calorie(3, 76F, 1.9F,1.6F, 5.6296F  ,3)
-                calDAO.update(cal3.userId, user3Updated)
-                assertEquals(user3Updated, calDAO.findByUserId(3))
+                val user3Updated = UserRating(3, 5,  3)
+                ratingDAO.update(rate3.userId, user3Updated)
+                assertEquals(user3Updated, ratingDAO.findByUserId(3))
             }
         }
 
@@ -176,13 +176,13 @@ class CalorieTest {
 
                 //Arrange - create and populate table with three users
                 val userDAO = populateUserTable()
-                val calDAO = populateUserCalorieTable()
+                val ratingDAO = populateUserRatingTable()
 
                 //Act & Assert
-                val user4Updated = Calorie(3, 76F, 1.9F,1.6F, 5.6296F  ,4)
-                calDAO.update(4, user4Updated)
-                assertEquals(null, calDAO.findByUserId(4))
-                assertEquals(3, calDAO.getAll().size)
+                val user4Updated = UserRating(4, 3,   4)
+                ratingDAO.update(4, user4Updated)
+                assertEquals(null, ratingDAO.findByUserId(4))
+                assertEquals(3, ratingDAO.getAll().size)
             }
         }
     }

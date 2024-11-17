@@ -23,7 +23,7 @@ object RatingController{
     fun getRatingsByUserId(ctx: Context) {
         if (userDao.findById(ctx.pathParam("user-id").toInt()) != null) {
             val ratings = ratingDAO.findByUserId(ctx.pathParam("user-id").toInt())
-            if (ratings.isNotEmpty()) {
+            if (ratings!=null) {
                 ctx.json(ratings)
             }
         }

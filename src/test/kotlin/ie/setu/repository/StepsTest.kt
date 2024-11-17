@@ -1,7 +1,6 @@
 package ie.setu.repository
 
 import ie.setu.domain.Step
-import ie.setu.domain.UserBMI
 import ie.setu.domain.db.StepsTrack
 import ie.setu.domain.db.Users
 import ie.setu.domain.repository.StepsDAO
