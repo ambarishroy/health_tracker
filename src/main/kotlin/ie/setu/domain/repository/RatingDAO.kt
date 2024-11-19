@@ -30,12 +30,12 @@ class RatingDAO{
         }
     }
     //Save the rating to the database
-    fun save(rate: UserRating){
-        transaction {
+    fun save(rate: UserRating): Int?{
+        return transaction {
             Ratings.insert {
                 it[rating] = rate.rating
                 it[userId] = rate.userId
-            }
+            }get Ratings.id
         }
     }
     fun delete(id: Int):Int{
@@ -44,8 +44,8 @@ class RatingDAO{
         }
     }
 
-    fun update(id: Int, rate: UserRating){
-        transaction {
+    fun update(id: Int, rate: UserRating): Int{
+        return transaction {
             Ratings.update ({
                 Ratings.userId eq id}) {
                 it[rating] = rate.rating
