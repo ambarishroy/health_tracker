@@ -3,6 +3,10 @@ package ie.setu.helpers
 import ie.setu.domain.User
 import ie.setu.domain.UserRating
 
+
+val validId=1
+val validUserId=2
+val validRating=3
 val rate= arrayListOf<UserRating>(
     UserRating(rating = 5, id = 1, userId = 1),
     UserRating(rating = 3, id = 2, userId = 2),
