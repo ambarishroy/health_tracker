@@ -3,6 +3,7 @@ package ie.setu.config
 import ie.setu.controllers.*
 import ie.setu.utils.jsonObjectMapper
 import io.javalin.Javalin
+import io.javalin.http.Header
 import io.javalin.json.JavalinJackson
 import io.javalin.vue.VueComponent
 
@@ -17,6 +18,10 @@ class JavalinConfig {
         }.apply {
             exception(Exception::class.java) { e, _ -> e.printStackTrace() }
             error(404) { ctx -> ctx.json("404 : Not Found") }
+        }.before { ctx ->
+            ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+            ctx.header(Header.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PATCH, DELETE, OPTIONS")
+            ctx.header(Header.ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization")
         }.start(7001)
 
         registerRoutes(app)
@@ -67,8 +72,14 @@ class JavalinConfig {
 
         app.get("/", VueComponent("<home-page></home-page>"))
         app.get("/users", VueComponent("<user-overview></user-overview>"))
+        app.get("/bloodpressure", VueComponent("<user-bloodpressure></user-bloodpressure>"))
+        app.get("/ratings", VueComponent("<user-ratings></user-ratings>"))
+        app.get("/bmi", VueComponent("<user-bmi></user-bmi>"))
+        app.get("/calorie", VueComponent("<user-calorie></user-calorie>"))
+        app.get("/steps", VueComponent("<user-steps></user-steps>"))
         app.get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
         app.get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
+        app.get("/users/{user-id}/bloodpressure", VueComponent("<user-bloodpressure-overview></user-bloodpressure-overview>"))
 
 
     }
