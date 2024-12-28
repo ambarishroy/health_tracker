@@ -153,7 +153,7 @@ app.component("user-profile", {
           // Assign the normalized array to `rate`
           this.rate = data;
 
-          console.log("Normalized rating data:", this.rate); // Log the normalized data
+          console.log("Normalized rating data:", this.rate);
         })
         .catch((error) => {
           console.log("No rating data added yet (this is ok): " + error);
