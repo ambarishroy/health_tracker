@@ -45,14 +45,31 @@
         </form>
       </div>
       <div class="card-footer text-left">
-        <p  v-if="activities.length === 0"> No activities yet...</p>
-        <p  v-if="activities.length > 0"> Activities so far...</p>
         <ul>
-          <li v-for="activity in activities">
+          <li v-for="activity in activities" :key="activity.id">
             {{ activity.description }} for {{ activity.duration }} minutes
           </li>
+          <li v-for="bp in bloodpressure" :key="bp.id">
+            Blood Pressure: {{ bp.category }}
+          </li>
+          <li v-for="bmiData in bmi" :key="bmiData.id">
+            BMI: {{ bmiData.calculatedBMI }}
+          </li>
+          <li v-for="step in steps" :key="step.id">
+            Steps: {{ step.status }}
+          </li>
+          <li v-for="calorie in calorie" :key="calorie.id">
+            Calorie: {{ calorie.calculatedCalorie }}
+          </li>
+          <li v-for="rate in rate" :key="rate.id">
+            Rating: {{ rate.rating || "No rating available" }}/5
+          </li>
         </ul>
+        <p v-if="activities.length === 0 && bloodpressure.length === 0 && bmi.length === 0 && steps.length === 0 && calorie.length === 0 && rate.length === 0">
+          No data available for this user.
+        </p>
       </div>
+
 
     </div>
   </app-layout>
@@ -65,6 +82,11 @@ app.component("user-profile", {
     user: null,
     noUserFound: false,
     activities: [],
+    bloodpressure: [],
+    bmi: [],
+    rate: [],
+    steps: [],
+    calorie: []
   }),
   created: function () {
     const userId = this.$javalin.pathParams["user-id"];
@@ -80,6 +102,63 @@ app.component("user-profile", {
         .catch(error => {
           console.log("No activities added yet (this is ok): " + error)
         })
+    axios.get(url + `/bloodpressure`)
+        .then((res) => {
+          console.log("Raw Bloodpressure data:", res.data);
+
+          const data = Array.isArray(res.data) ? res.data : [res.data];
+          this.bloodpressure = data.filter(bp => bp.category && bp.category.trim() !== "");
+          console.log("Filtered Bloodpressure data:", this.bloodpressure);
+        })
+        .catch((error) => {
+          console.log("No bloodpressure data available or an error occurred:", error);
+        });
+    axios.get(url + `/bmi`)
+        .then((res) => {
+          console.log("Raw BMI data:", res.data); // Debug the API response
+          const data = Array.isArray(res.data) ? res.data : [res.data]; // Normalize to array
+          this.bmi = data.filter((bmi) => bmi.calculatedBMI); // Filter valid entries
+          console.log("Filtered BMI data:", this.bmi);
+        })
+        .catch((error) => {
+          console.log("No BMI data added yet (this is ok): " + error);
+        });
+    axios.get(url + `/steps`)
+        .then((res) => {
+          console.log("Raw steps data:", res.data); // Debug the API response
+          const data = Array.isArray(res.data) ? res.data : [res.data]; // Normalize to array
+          this.steps = data.filter((steps) => steps.status); // Filter valid entries
+          console.log("Filtered steps data:", this.steps);
+        })
+        .catch((error) => {
+          console.log("No steps data added yet (this is ok): " + error);
+        });
+    axios.get(url + `/calorie`)
+        .then((res) => {
+          console.log("Raw calorie data:", res.data); // Debug the API response
+          const data = Array.isArray(res.data) ? res.data : [res.data]; // Normalize to array
+          this.calorie = data.filter((cal) => cal.calculatedCalorie); // Filter valid entries
+          console.log("Filtered steps data:", this.calorie);
+        })
+        .catch((error) => {
+          console.log("No steps data added yet (this is ok): " + error);
+        });
+    axios.get(url + `/ratings`)
+        .then((res) => {
+          console.log("Raw ratings data:", res.data); // Log the raw response
+
+          // Normalize response to array
+          const data = Array.isArray(res.data) ? res.data : [res.data];
+
+          // Assign the normalized array to `rate`
+          this.rate = data;
+
+          console.log("Normalized rating data:", this.rate);
+        })
+        .catch((error) => {
+          console.log("No rating data added yet (this is ok): " + error);
+        });
+
   },
   methods: {
     updateUser: function () {

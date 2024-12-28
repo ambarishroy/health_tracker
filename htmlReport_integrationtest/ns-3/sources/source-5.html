@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > RatingController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ie.setu.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: RatingController (ie.setu.controllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RatingController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95.8%
+  </span>
+  <span class="absValue">
+    (23/24)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">RatingController$addRating$$inlined$jsonToObject$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">RatingController$updateUserRating$$inlined$jsonToObject$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (8/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.2%
+  </span>
+  <span class="absValue">
+    (25/26)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ie.setu.controllers
+&nbsp;
+&nbsp;import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+&nbsp;import com.fasterxml.jackson.module.kotlin.readValue
+&nbsp;import ie.setu.domain.UserRating
+&nbsp;import ie.setu.domain.repository.RatingDAO
+&nbsp;import ie.setu.domain.repository.UserDAO
+&nbsp;import ie.setu.utils.jsonToObject
+&nbsp;import io.javalin.http.Context
+&nbsp;
+&nbsp;object RatingController{
+<b class="fc">&nbsp;    private val ratingDAO= RatingDAO()</b>
+<b class="fc">&nbsp;    private val userDao= UserDAO()</b>
+&nbsp;
+&nbsp;    fun getAllRatings(ctx: Context) {
+<b class="fc">&nbsp;        val usersRatings = ratingDAO.getAll()</b>
+<b class="pc">&nbsp;        if (usersRatings.size != 0) {</b>
+<b class="fc">&nbsp;            ctx.status(200)</b>
+&nbsp;        }
+&nbsp;        else{
+<b class="nc">&nbsp;            ctx.status(404)</b>
+&nbsp;        }
+<b class="fc">&nbsp;        ctx.json(usersRatings)</b>
+&nbsp;    }
+&nbsp;    fun addRating(ctx: Context) {
+<b class="fc">&nbsp;        val rating : UserRating = jsonToObject(ctx.body())</b>
+<b class="fc">&nbsp;        val userId = ratingDAO.save(rating)</b>
+<b class="pc">&nbsp;        if (userId != null) {</b>
+&nbsp;            //rating.userId = userId
+<b class="fc">&nbsp;            ctx.json(rating)</b>
+<b class="fc">&nbsp;            ctx.status(201)</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    fun getRatingsByUserId(ctx: Context) {
+<b class="fc">&nbsp;        val ratings = ratingDAO.findByUserId(ctx.pathParam(&quot;user-id&quot;).toInt())</b>
+<b class="fc">&nbsp;            if (ratings!=null) {</b>
+<b class="fc">&nbsp;                ctx.json(ratings)</b>
+<b class="fc">&nbsp;                ctx.status(200)</b>
+&nbsp;            }
+&nbsp;            else{
+<b class="fc">&nbsp;                ctx.status(404)</b>
+&nbsp;            }
+&nbsp;
+&nbsp;    }
+&nbsp;    fun deleteUserRating(ctx: Context){
+<b class="fc">&nbsp;        if(ratingDAO.delete(ctx.pathParam(&quot;user-id&quot;).toInt())!=0)</b>
+<b class="fc">&nbsp;            ctx.status(204)</b>
+&nbsp;        else
+<b class="fc">&nbsp;            ctx.status(404)</b>
+&nbsp;    }
+<b class="fc">&nbsp;</b>
+&nbsp;    fun updateUserRating(ctx: Context){
+&nbsp;//        val mapper = jacksonObjectMapper()
+&nbsp;//        val userUpdates = mapper.readValue&lt;UserRating&gt;(ctx.body())
+<b class="fc">&nbsp;        val foundUser : UserRating = jsonToObject(ctx.body())</b>
+<b class="fc">&nbsp;        if ((ratingDAO.update(id = ctx.pathParam(&quot;user-id&quot;).toInt(), rate = foundUser)) != 0)</b>
+<b class="fc">&nbsp;            ctx.status(204)</b>
+&nbsp;        else
+<b class="fc">&nbsp;            ctx.status(404)</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-23 11:49</div>
+</div>
+</body>
+</html>

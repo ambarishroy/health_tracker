@@ -1,0 +1,211 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BMIController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">ie.setu.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: BMIController (ie.setu.controllers)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BMIController</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.8%
+  </span>
+  <span class="absValue">
+    (2/17)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">BMIController$addBMI$$inlined$readValue$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">BMIController$updateUserBMI$$inlined$readValue$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    12.5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10.5%
+  </span>
+  <span class="absValue">
+    (2/19)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package ie.setu.controllers
+&nbsp;
+&nbsp;import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+&nbsp;import com.fasterxml.jackson.module.kotlin.readValue
+&nbsp;import ie.setu.domain.UserBMI
+&nbsp;import ie.setu.domain.repository.BMIDAO
+&nbsp;import ie.setu.domain.repository.UserDAO
+&nbsp;import io.javalin.http.Context
+&nbsp;
+&nbsp;object BMIController{
+<b class="fc">&nbsp;    private val bmiDAO = BMIDAO()</b>
+<b class="fc">&nbsp;    private val userDao = UserDAO()</b>
+&nbsp;
+&nbsp;    fun getAllBMI(ctx: Context) {
+<b class="nc">&nbsp;        ctx.json(bmiDAO.getAll())</b>
+&nbsp;    }
+&nbsp;    fun addBMI(ctx: Context) {
+<b class="nc">&nbsp;        val mapper = jacksonObjectMapper()</b>
+<b class="nc">&nbsp;        val bmi = mapper.readValue&lt;UserBMI&gt;(ctx.body())</b>
+<b class="nc">&nbsp;        bmiDAO.save(bmi)</b>
+<b class="nc">&nbsp;        ctx.json(bmi)</b>
+&nbsp;    }
+&nbsp;    fun getBMIByUserId(ctx: Context) {
+<b class="nc">&nbsp;        if (userDao.findById(ctx.pathParam(&quot;user-id&quot;).toInt()) != null) {</b>
+<b class="nc">&nbsp;            val bmi = bmiDAO.findByUserId(ctx.pathParam(&quot;user-id&quot;).toInt())</b>
+<b class="nc">&nbsp;            if (bmi != null) {</b>
+<b class="nc">&nbsp;                ctx.json(bmi)</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;    fun deleteUserBMI(ctx: Context){
+<b class="nc">&nbsp;        bmiDAO.delete(ctx.pathParam(&quot;user-id&quot;).toInt())</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    fun updateUserBMI(ctx: Context){
+<b class="nc">&nbsp;        val mapper = jacksonObjectMapper()</b>
+<b class="nc">&nbsp;        val userUpdates = mapper.readValue&lt;UserBMI&gt;(ctx.body())</b>
+<b class="nc">&nbsp;        bmiDAO.update(</b>
+<b class="nc">&nbsp;            id = ctx.pathParam(&quot;user-id&quot;).toInt(),</b>
+<b class="nc">&nbsp;            bmi = userUpdates)</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-11-23 11:49</div>
+</div>
+</body>
+</html>
