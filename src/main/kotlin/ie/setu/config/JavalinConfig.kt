@@ -23,10 +23,20 @@ class JavalinConfig {
             ctx.header(Header.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PATCH, DELETE, OPTIONS")
             ctx.header(Header.ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization")
         }.start(7001)
+        fun startJavalinService(): Javalin {
+            app.start(getRemoteAssignedPort())
+            registerRoutes(app)
+            return app
+        }
 
+        fun getJavalinService(): Javalin {
+            registerRoutes(app)
+            return app
+        }
         registerRoutes(app)
         return app
     }
+
 
     private fun registerRoutes(app: Javalin) {
         app.get("/api/users", HealthTrackerController::getAllUsers)
@@ -80,7 +90,11 @@ class JavalinConfig {
         app.get("/users/{user-id}", VueComponent("<user-profile></user-profile>"))
         app.get("/users/{user-id}/activities", VueComponent("<user-activity-overview></user-activity-overview>"))
         app.get("/users/{user-id}/bloodpressure", VueComponent("<user-bloodpressure-overview></user-bloodpressure-overview>"))
-
-
+    }
+    private fun getRemoteAssignedPort(): Int {
+        val remotePort = System.getenv("PORT")
+        return if (remotePort != null) {
+            Integer.parseInt(remotePort)
+        } else 7001
     }
 }
